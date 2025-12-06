@@ -33,19 +33,44 @@
 
         .heart {
             position: absolute;
-            font-size: 20px;
             animation: fall linear infinite;
             opacity: 0;
+            width: 90px;
+            height: 90px;
+        }
+
+        /* Style untuk gambar berbentuk hati - PENTING! */
+        .heart img {
+            display: block;
+            width: 90px;
+            height: 90px;
+            object-fit: cover;
+        
+            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.5));
+        }
+        
+        @media (max-width: 768px) {
+            .heart {
+                width: 70px;
+                height: 70px;
+            }
+            
+            .heart img {
+                width: 70px;
+                height: 70px;
+            }
         }
 
         @keyframes fall {
             0% {
                 top: -10%;
                 opacity: 0.8;
+                transform: rotate(0deg);
             }
             100% {
                 top: 110%;
                 opacity: 0;
+                transform: rotate(360deg);
             }
         }
 
@@ -83,14 +108,29 @@
         }
 
         .emoji {
-            font-size: 80px;
-            margin-bottom: 20px;
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 20px;
             animation: bounce 2s infinite;
+            overflow: hidden;
+            border-radius: 50%;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .emoji img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 35%;
+            
+            transform: scale(1.1);
         }
 
         @media (max-width: 768px) {
             .emoji {
-                font-size: 60px;
+                width: 120px;
+                height: 120px;
                 margin-bottom: 15px;
             }
         }
@@ -228,7 +268,9 @@
     
     <div class="container">
         <div id="question-section">
-            <div class="emoji">💝</div>
+            <div class="emoji">
+                <img src="4.jpeg" alt="Our Photo">
+            </div>
             <h1>Hai Uill Cantik!</h1>
             <div class="message">
                 dari yang aku rasain setelah beberapa hari kita deket, aku ngerasa sama kamu aku aman dan nyamann banget. <br>
@@ -239,7 +281,7 @@
             </div>
             <div class="buttons">
                 <button class="yes-btn" onclick="sayYes()">Mau ❤️</button>
-                <button class="no-btn" id="noBtn" onmouseover="moveButton()">Nggak 💔</button>
+                <button class="no-btn" id="noBtn" onmouseover="moveButton()" ontouchstart="moveButton()">Nggak 💔</button>
             </div>
         </div>
 
@@ -256,32 +298,36 @@
     </div>
 
     <script>
-        // Animasi hati berjatuhan
+        // Animasi gambar berbentuk hati berjatuhan
         function createHeart() {
-            const heart = document.createElement('div');
-            heart.className = 'heart';
-            heart.innerHTML = '❤️';
-            heart.style.left = Math.random() * 100 + '%';
-            heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
-            heart.style.fontSize = (Math.random() * 20 + 15) + 'px';
-            document.getElementById('hearts').appendChild(heart);
+            const heartContainer = document.createElement('div');
+            heartContainer.className = 'heart';
+            
+            const heartImg = document.createElement('img');
+            // Ganti '1.jpeg' dengan path gambar kamu
+            heartImg.src = '1.jpeg';
+            heartImg.alt = 'heart';
+            // Pastikan ukuran di inline style juga
+            heartImg.style.width = '50px';
+            heartImg.style.height = '50px';
+            
+            heartContainer.appendChild(heartImg);
+            heartContainer.style.left = Math.random() * 100 + '%';
+            heartContainer.style.animationDuration = (Math.random() * 3 + 3) + 's';
+            
+            document.getElementById('hearts').appendChild(heartContainer);
             
             setTimeout(() => {
-                heart.remove();
-            }, 5000);
+                heartContainer.remove();
+            }, 6000);
         }
 
-        setInterval(createHeart, 300);
+        setInterval(createHeart, 400);
 
         // Tombol "Nggak" yang lari
         function moveButton() {
             const btn = document.getElementById('noBtn');
-            const container = document.querySelector('.container');
-            const containerRect = container.getBoundingClientRect();
-            
-            // Untuk mobile, gerakkan dalam area yang lebih terbatas
             const isMobile = window.innerWidth <= 768;
-            const moveRange = isMobile ? 50 : 150;
             
             const maxX = window.innerWidth - 200;
             const maxY = window.innerHeight - 100;
@@ -289,7 +335,7 @@
             let x = Math.random() * maxX;
             let y = Math.random() * maxY;
             
-            // Pastikan tombol tidak keluar dari layar di mobile
+            // Pastikan tombol tidak keluar dari layar
             x = Math.max(20, Math.min(x, maxX - 20));
             y = Math.max(20, Math.min(y, maxY - 20));
             
@@ -305,7 +351,7 @@
             document.getElementById('response-section').style.display = 'block';
             
             // Ledakan hati
-            for(let i = 0; i < 50; i++) {
+            for(let i = 0; i < 60; i++) {
                 setTimeout(createHeart, i * 50);
             }
         }
